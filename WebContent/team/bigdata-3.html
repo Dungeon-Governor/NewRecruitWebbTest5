@@ -1,0 +1,411 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="css/sanzu.css" rel="stylesheet">
+<script src="js/jquery-2.1.1.min.js"></script>
+	<script>
+	//鼠标划过
+        function fn(obj){
+           var target=document.getElementById(obj);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='transparent';
+           target.style.backgroundColor='#6b7173';
+        }
+        function fnn(i){
+           var a=document.getElementById(i);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='#6b7173';
+           a.style.backgroundColor='transparent';
+        }
+        //表单验证只能输入数字
+         function inp(x){   
+var regStrs = [ 
+ ['^0(\\d+)', '$1'], //禁止录入整数部分两位以上，但首位为0 
+ ['[^0-9\]', ''] //禁止录入任何非数字和点 
+]; 
+ for(i=0; i<regStrs.length; i++){ 
+ var reg = new RegExp(regStrs[i][0]); 
+ x.value = x.value.replace(reg, regStrs[i][1]); 
+ } 
+}
+   //模态框效果
+        window.onload=function(){
+        function $(id){return document.getElementById(id);}
+       	  $("apply").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+       	  $("close_all").onclick=function(){
+       	  	$("mask").style.display="none";
+            $("box").style.display="none";
+       	  }
+       	  $("li4").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+        //轮播图
+          // 获取所有的li，轮播的元素
+    var lis = document.getElementById('lun').children[0].children;
+    console.log(lis);
+    // 获取所有的数字li
+    var num_lis = document.getElementById('num_list').children[0].children;
+    // console.log(num_lis);
+    // lis 长度为4，下标从0开始
+    // 设置i下标，表示第几张图片
+    var i = 0;
+    // 设置轮播图是否已启动的标志
+    var run = null;
+    // 获取左箭头/右箭头
+    var left = document.getElementById('left');
+    var right = document.getElementById('right');
+    // 设置定时器函数
+    function autoRun(){
+      run = setInterval(function(){
+        // 当前显示的图片要隐藏
+        lis[i].removeAttribute('class');
+        // 当前显示激活的数字的背景要被移除
+        num_lis[i].children[0].removeAttribute('class');
+        // children[0]  === firstElementChild
+        // i 下标，自增，表示下一张
+        i++;
+        // 如果循环到了最后一张图片
+        if(i==lis.length){
+          i=0;
+        }
+        // 下一张显示
+        lis[i].className = 'active';
+        // 下一个数字的背景设置为激活
+        num_lis[i].children[0].className = 'active_num';
+      },1000);
+    }
+    // 第一次进入该页面，调用轮播函数
+    autoRun();
+    // 给每一张图都设置鼠标进入、移出的事件
+    for(var j=0;j<lis.length;j++){
+      // 当鼠标进入到轮播图时，停止
+      lis[j].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 显示左右箭头
+        left.style.display = 'block';
+        right.style.display = 'block';
+      }
+      // 鼠标离开继续开始
+      lis[j].onmouseout = function(){
+        // 再次调用轮播函数
+        autoRun();
+        // 显示左右箭头
+        left.style.display = 'none';
+        right.style.display = 'none';
+      }
+    }
+    // 给每一个数字都设置鼠标的移入、移出事件
+    for(var k=0;k<num_lis.length;k++){
+      // 将数字对应的下标绑定到每一个span中
+      num_lis[k].firstElementChild.setAttribute('num',k);
+      // 移入事件
+      num_lis[k].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 移出之前的元素的 ---> i 图片
+        lis[i].className = '';
+        // 数字列表位置的背景移除
+        num_lis[i].firstElementChild.className = '';
+        // 上面的图片对应的当前的数字进行显示
+        i = this.firstElementChild.getAttribute('num');
+        // alert(i);
+        // 当前图
+        lis[i].className = 'active';
+        // 当前数字
+        num_lis[i].firstElementChild.className = 'active_num';
+      }
+      // 移除
+      num_lis[k].onmouseout = function(){
+        // 重新启动定时器
+        autoRun();
+      }
+    }
+    // 当鼠标移入、移除 num_list div时相应的停止、开始
+    num_list.onmouseover = function(){
+      // 停止
+      clearInterval(run);
+    }
+    num_list.onmouseout = function(){
+      // 先清除，再调用
+      clearInterval(run);
+      // 调用函数
+      autoRun();
+    }
+    // 给右箭头设置over和out事件
+    right.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    right.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    right.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i++ 之后，显示新的
+      i++;
+      // 判断临界点
+      if(i==lis.length){
+        i=0;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+    }
+    // 给左箭头设置over和out事件
+    left.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    left.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    left.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i的值如果是0，表示当前已经是第一张
+      // i++ 之后，显示新的
+      i--;
+      // 判断临界点
+      if(i<0){
+        // 下标的最大值 = 长度 - 1
+        i=lis.length - 1;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+    }
+        }
+        //返回顶部
+      $(document).ready(function(){  
+    $("#go_top").hide();  
+    $(function () {  
+        //检测屏幕高度  
+        var height=$(window).height();  
+        //scroll() 方法为滚动事件  
+        $(window).scroll(function(){  
+            if ($(window).scrollTop()>height){  
+                $("#go_top").fadeIn(500);  
+            }else{  
+                $("#go_top").fadeOut(500);  
+                }  
+        });  
+        $("#go_top").click(function(){  
+            $('body,html').animate({scrollTop:0},100);  
+            return false;  
+        });  
+    });  
+});
+      function pan(){
+      var  in1value=document.getElementById("in1").value;
+      var  in2value=document.getElementById("in2").value;
+      var  in3value=document.getElementById("in3").value;
+      var  in4value=document.getElementById("in4").value;
+      if(in1value==""){
+        alert("姓名不能为空");
+		return false;
+      }
+      else if(in2value==""){
+        alert("QQ不能为空");
+		return false;
+      }
+      else if(in3value==""){
+        alert("专业不能为空");
+		return false;
+      }
+      else if (in4value=="") {
+        alert("联系方式不能为空");
+		return false;
+      }
+      else{ return true;}
+
+     }
+
+	</script>
+<title>三组详情</title>
+</head>
+<body>
+	<nav>
+       <ul class="ul1">
+          <a href="#"><li id="li1">三组首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li2" onmouseover="fn('li2');" onmouseout="fnn('li2')">招新首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li3" onmouseover="fn('li3');" onmouseout="fnn('li3')">科研室首页</li></a>
+          <a href="#"><li id="li4" onmouseover="fn('li4');" onmouseout="fnn('li4')">报名加入</li></a>
+       </ul>
+       <p>这里提供给你免费的平台去学习，去拼搏努力，加入我们实现自己的价值！</p>
+	</nav>
+	<div class="video">
+  <div id="lun">
+    <ul>
+      <li class="active"><img src="images/3-1.jpg"/></li>
+      <li><img src="images/3-2.jpg"/></li>
+      <li><img src="images/3-3.jpg"/></li>
+      <li><img src="images/3-4.jpg"/></li>
+    </ul>
+   <div id="num_list">
+      <ul>
+         <li class="active_num"><span class="active_num">1</span></li>
+         <li><span>2</span></li>
+         <li><span>3</span></li>
+         <li><span>4</span></li>
+      </ul>
+   </div>
+   <div id="left"></div>
+   <div id="right"></div>
+  </div>
+  </div>
+	<div class="sanzu">
+       <a href="#web"><div class="one"></div></a>
+       <a href="#backstage"><div class="two"></div></a>
+       <a href="#ui"><div class="three"></div></a>
+	</div>
+	<div class="introduce">
+        <div class="details">
+           <table>
+              <tr>
+                 <td class="big">技术岗</td>
+                 <td class="small">网页UI设计师</br>移动UI设计师</br>交互UI设计师</br>电商美工</br>平面设计</br></td>
+                 <td class="big">运维岗</td>
+                 <td class="small">新媒体运营师</td>
+              </tr>
+              <tr>
+                 <td class="small">HTML5开发工程师</br>Java开发工程师</br>Php开发工程师</br>Python开发工程师</br></td>
+                 <td class="big">设计岗</td>
+                 <td class="small">数据库DBA</br>Linux运维工程师</br></td>
+                 <td class="big">运营岗</td>
+              </tr>
+           </table>
+        </div>
+	</div>
+	<div id="web">
+	    <div class="web1"><span>A</span>web前端开发</div>
+        <div class="web2">
+           <ul class="ul2">
+              <li><img src="images/u5.jpg"></li>
+              <li><img src="images/u1.jpg"></li>
+              <li><img src="images/w3.jpg"></li>
+              <li><img src="images/u3.jpg"></li>
+              <li><img src="images/w5.jpg"></li>
+           </ul>
+           <div class="web4"></div>
+           <div class="web3">
+           &nbsp&nbsp前端开发是从网页制作演变而来的技术，包括前端美工、IE兼容、CSS、HTML“传统”技术与Adobe AIR、Google Gears，以及概念性较强的交互式设计、艺术性较强的视觉设计等。</br>
+           
+           &nbsp&nbsp学习HTML5和CSS3基础，学习Java，了解DOM，学习Web前端核心，学习HTTP协议及Server端技术，学习Web前端高级技术等。</br>
+           
+           &nbsp&nbsp前端开发正处于发展的高峰期。由于各互联网公司都注意到站点的可用性问题，为了加强其产品的用户体验，吸引用户前，各种以“用户体验”的团队开始如雨后春笋般出现。 无论底层技术的支持上，还是跨平台兼容的需求上，都为迎来前端的繁荣局面做好了准备。预计前端主导的产品会越来越多，前端开发的位置会越来越重要要。</br>
+           未来的工作方向：前端开发师；前端制作工程师；网页制作工程师；资深前端开发工程师:前端架构师：网页重构工程师。</br>
+           
+           &nbsp&nbspWeb前端工程师不但薪资高，也是目前国内最紧缺的岗位。北京前端开发平均工资：¥11555元/月； 上海前端开发平均工资：10341元/月；div+css，js会套用效果的8k，新手熟悉切图，工作效率高的10k左右；有工作经验的，会ajax，可以手写代码，就是指常用的单词不用靠编辑器，了解后台语言（php最好），不低于12k；对原生js有非常深入的研究，开发组件，框架库之类的，15k+，最低12k。
+            <p class="down">网盘视频下载：<a href="http://pan.baidu.com/s/1gfEBMEn">http://pan.baidu.com/s/1gfEBMEn</a></p>
+           </div>
+           <div class="web5"></div>
+         </div>
+	</div>
+	<div id="backstage">
+        <div class="backstage1"><span>B</span>后台开发</div>
+        <div class="backstage2">
+           <ul class="ul3">
+              <li><img src="images/b1.jpg"></li>
+              <li><img src="images/b2.jpg"></li>
+              <li><img src="images/b3.jpg"></li>
+              <li><img src="images/b4.jpg"></li>
+              <li><img src="images/b5.jpg"></li>
+           </ul>
+           <div class="backstage4"></div>
+           <div class="backstage3">
+           &nbsp&nbsp网站后台，也称为网站管理后台，是指用于管理网站前台的一系列操作，如：产品、企业信息的增加、更新、删除等。通过网站管理后台，可以有效的管理网站供浏览者查阅的信息。</br>
+           
+	       &nbsp&nbsp后台学习主要选择J2EE路线，从java基础学起，之后学习servlet，jsp等简单的动态网页技术，然后学习当前主流的框架ssh与ssm，并结合案例，边学边巩固。</br>
+           
+	       &nbsp&nbsp据权威预测，至2013年，中国将新增15000家IT企业。强势增长拉动了该行业对IT人才的需求，未来发展中，JAVA将成为IT从业者必须掌握的一门语言。不管你对Java是怎样一个态度,有一点不可否认,Java是现在全球最时髦的开发工具之一,也许现在还无法准确评估Java为整个IT业带来的影响,但是有一点却毋庸置疑---Java将不可避免地影响一代程序。</br>
+           
+	       &nbsp&nbsp程序员工资一直居高不下。北京程序员平均工资是12715元，和此相差无几的是上海、深圳、南京和西安，所以程序员在逃离北上广之后选择南京和西安也会有不错的生活。在工作年限上，1-3年和3-5年的工程师平均薪酬相差不多，而5年以后的工程师薪酬有了明显的上升，这说明资深工程师在市场上更加抢手。</br>
+          <p class="down">网盘视频下载：<a href="http://pan.baidu.com/s/1o8c3OcM">http://pan.baidu.com/s/1o8c3OcM</a></p>
+           </div>
+          <div class="backstage5"></div>
+      </div>
+    </div>
+	<div id="ui">
+        <div class="ui1"><span>C</span>UI界面设计</div>
+        <div class="ui2">
+           <ul class="ul4">
+              <li><img src="images/u1.jpg"></li>
+              <li><img src="images/u2.jpg"></li>
+              <li><img src="images/u3.jpg"></li>
+              <li><img src="images/u4.jpg"></li>
+              <li><img src="images/u5.jpg"></li>
+           </ul>
+           <div class="ui4"></div>
+           <div class="ui3" >
+           &nbsp&nbspUI即User Interface(用户界面)的简称。UI设计是指对软件的人机交互、操作逻辑、界面美观的整体设计。好的UI设计不仅是让软件变得有个性有品位，还要让软件的操作变得舒适简单、自由，充分体现软件的定位和特点。软件设计可分为两个部分：编码设计与UI设计。UI的本意是用户界面，是英文User和Interface的缩写。从字面上看是用户与界面2个部分组成，但实际上还包括用户与界面之间的交互关系。</br>
+          
+           &nbsp&nbsp新手先集中精力学习PS和AI。这2个是最基础的工具了。如果要安装的话，建议安装最新版的Photoshop CC2017 ， IllustratorCC2017。然后你能力到了一定的地步，恰好有钱买了MAC，可以学习下Sketch。建议安装最新版本，功能比较强大。Axure有时间也可以学习一下，会简单的操作就行。再往后，可以学习下AE和C4D。到这个底部已经算很牛的了</br>
+           
+           &nbsp&nbspUI即用户界面设计行业刚刚在全球软件业兴起，属于高新技术设计产业，与国外在同步发展水平。其次国内外众多大型IT企业(例如：百度、腾讯、Yahoo、中国移动、Nokia、联想、网易、微软、盛大、淘宝等众多企业)均已成立专业的UI设计[1]  部门，但专业人才稀缺，人才资源争夺激烈。就业市场供不应求。UI设计工作的年薪基本保持在10到15万，经验丰富者可以达到20万，资深的UI设计人员年薪可以更高。
+           <p class="down">网盘视频下载：<a href="http://pan.baidu.com/s/1ge36lLT">http://pan.baidu.com/s/1ge36lLT</a></p>
+           </div>
+           <div class="ui5"></div>	
+        </div>
+	</div>
+	<div id="apply"><img src="images/apply.jpg"></div>
+	<div id="mask"></div>
+	<div id="box">
+        <span id="close_all">×</span>
+        <div class="write"><img src="images/tiao.png"><p>填写报名信息</p><img src="images/tiao.png"></div>
+       <form action="/NewRecruitWebb/team.do" method="post" onSubmit="return pan()">
+        <div id="content">
+            <div id="con1"><p>姓名：</p><input name="username" type="text" id="in1" onchange="javascript:if(!/^[\u4e00-\u9fa5]+$/gi.test(this.value)){alert('姓名含有非汉字字符');this.value='';}"></div>
+            <div id="con3"><p>QQ：</p><input name="qq" type="text"   onKeyUp="inp(this)" id="in2"></div>
+            <div id="con2"><p>专业班级：</p><input name="profession" type="text" id="in3"></div>
+            <div id="con4"><p>联系方式：</p><input name="phone" type="text" onKeyUp="inp(this)" id="in4"></div>
+            <div id="con5"><p>报名方向:</p><select name="direction">
+                <option>web前端开发</option>
+                <option>后台开发</option>
+                <option>UI界面设计</option>
+            </select></div>
+            <input type="hidden" name="team" value="3">
+            <button type="submit" id="btn">提交</button>
+        </div>
+        </form>
+	</div>
+	<div id="go_top"><img src="images/return.png" alt="回到顶部图片"></div>
+	<div class="footer">
+        <p>版权所有&nbsp2017-2018&nbsp河北北方学院大数据科研室&nbsp地址:张家口河北北方学院东校区中厅503&nbsp邮编:075000</p>
+        <p>电话:15731337889&nbsp邮箱:1109248830@qq.com</p>
+       <div class="code"><img src="images/sanzu.png"></div>
+	</div>
+</body>
+   
+	
+</body>
+</html>

@@ -1,0 +1,379 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>一组详情</title>
+<link type="text/css" href="css/yizu.css" rel="stylesheet">
+	<script src="js/jquery-2.1.1.min.js"></script>
+<script>
+	//鼠标划过
+        function fn(obj){
+           var target=document.getElementById(obj);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='transparent';
+           target.style.backgroundColor='#6b7173';
+        }
+        function fnn(i){
+           var a=document.getElementById(i);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='#6b7173';
+           a.style.backgroundColor='transparent';
+        }
+        //表单验证只能输入数字
+         function inp(x){   
+var regStrs = [ 
+ ['^0(\\d+)', '$1'], //禁止录入整数部分两位以上，但首位为0 
+ ['[^0-9\]', ''] //禁止录入任何非数字和点 
+]; 
+ for(i=0; i<regStrs.length; i++){ 
+ var reg = new RegExp(regStrs[i][0]); 
+ x.value = x.value.replace(reg, regStrs[i][1]); 
+ } 
+}
+   //模态框效果
+        window.onload=function(){
+        function $(id){return document.getElementById(id);}
+       	  $("apply").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+       	  $("close_all").onclick=function(){
+       	  	$("mask").style.display="none";
+            $("box").style.display="none";
+       	  }
+       	  $("li4").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+        //轮播图
+          // 获取所有的li，轮播的元素
+    var lis = document.getElementById('lun').children[0].children;
+    console.log(lis);
+    // 获取所有的数字li
+    var num_lis = document.getElementById('num_list').children[0].children;
+    // console.log(num_lis);
+    // lis 长度为4，下标从0开始
+    // 设置i下标，表示第几张图片
+    var i = 0;
+    // 设置轮播图是否已启动的标志
+    var run = null;
+    // 获取左箭头/右箭头
+    var left = document.getElementById('left');
+    var right = document.getElementById('right');
+    // 设置定时器函数
+    function autoRun(){
+      run = setInterval(function(){
+        // 当前显示的图片要隐藏
+        lis[i].removeAttribute('class');
+        // 当前显示激活的数字的背景要被移除
+        num_lis[i].children[0].removeAttribute('class');
+        // children[0]  === firstElementChild
+        // i 下标，自增，表示下一张
+        i++;
+        // 如果循环到了最后一张图片
+        if(i==lis.length){
+          i=0;
+        }
+        // 下一张显示
+        lis[i].className = 'active';
+        // 下一个数字的背景设置为激活
+        num_lis[i].children[0].className = 'active_num';
+      },1000);
+    }
+    // 第一次进入该页面，调用轮播函数
+    autoRun();
+    // 给每一张图都设置鼠标进入、移出的事件
+    for(var j=0;j<lis.length;j++){
+      // 当鼠标进入到轮播图时，停止
+      lis[j].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 显示左右箭头
+        left.style.display = 'block';
+        right.style.display = 'block';
+      }
+      // 鼠标离开继续开始
+      lis[j].onmouseout = function(){
+        // 再次调用轮播函数
+        autoRun();
+        // 显示左右箭头
+        left.style.display = 'none';
+        right.style.display = 'none';
+      }
+    }
+    // 给每一个数字都设置鼠标的移入、移出事件
+    for(var k=0;k<num_lis.length;k++){
+      // 将数字对应的下标绑定到每一个span中
+      num_lis[k].firstElementChild.setAttribute('num',k);
+      // 移入事件
+      num_lis[k].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 移出之前的元素的 ---> i 图片
+        lis[i].className = '';
+        // 数字列表位置的背景移除
+        num_lis[i].firstElementChild.className = '';
+        // 上面的图片对应的当前的数字进行显示
+        i = this.firstElementChild.getAttribute('num');
+        // alert(i);
+        // 当前图
+        lis[i].className = 'active';
+        // 当前数字
+        num_lis[i].firstElementChild.className = 'active_num';
+      }
+      // 移除
+      num_lis[k].onmouseout = function(){
+        // 重新启动定时器
+        autoRun();
+      }
+    }
+    // 当鼠标移入、移除 num_list div时相应的停止、开始
+    num_list.onmouseover = function(){
+      // 停止
+      clearInterval(run);
+    }
+    num_list.onmouseout = function(){
+      // 先清除，再调用
+      clearInterval(run);
+      // 调用函数
+      autoRun();
+    }
+    // 给右箭头设置over和out事件
+    right.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    right.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    right.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i++ 之后，显示新的
+      i++;
+      // 判断临界点
+      if(i==lis.length){
+        i=0;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+    }
+    // 给左箭头设置over和out事件
+    left.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    left.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    left.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i的值如果是0，表示当前已经是第一张
+      // i++ 之后，显示新的
+      i--;
+      // 判断临界点
+      if(i<0){
+        // 下标的最大值 = 长度 - 1
+        i=lis.length - 1;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+    }
+        }
+        //返回顶部
+      $(document).ready(function(){  
+    $("#go_top").hide();  
+    $(function () {  
+        //检测屏幕高度  
+        var height=$(window).height();  
+        //scroll() 方法为滚动事件  
+        $(window).scroll(function(){  
+            if ($(window).scrollTop()>height){  
+                $("#go_top").fadeIn(500);  
+            }else{  
+                $("#go_top").fadeOut(500);  
+                }  
+        });  
+        $("#go_top").click(function(){  
+            $('body,html').animate({scrollTop:0},100);  
+            return false;  
+        });  
+    });  
+});
+      function pan(){
+      var  in1value=document.getElementById("in1").value;
+      var  in2value=document.getElementById("in2").value;
+      var  in3value=document.getElementById("in3").value;
+      var  in4value=document.getElementById("in4").value;
+      if(in1value==""){
+        alert("姓名不能为空");
+		return false;
+      }
+      else if(in2value==""){
+        alert("QQ不能为空");
+		return false;
+      }
+      else if(in3value==""){
+        alert("专业不能为空");
+		return false;
+      }
+      else if (in4value=="") {
+        alert("联系方式不能为空");
+		return false;
+      }
+      else{ return true;}
+
+     }
+
+	</script>
+</head>
+<body>
+	<nav>
+       <ul class="ul1">
+          <a href="#"><li id="li1">一组首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li2" onmouseover="fn('li2');" onmouseout="fnn('li2')">招新首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li3" onmouseover="fn('li3');" onmouseout="fnn('li3')">科研室首页</li></a>
+          <a href="#"><li id="li4" onmouseover="fn('li4');" onmouseout="fnn('li4')">报名加入</li></a>
+       </ul>
+       <p>这里提供给你免费的平台去学习，去拼搏努力，加入我们实现自己的价值！</p>
+	</nav>
+    <div class="video">
+  <div id="lun">
+    <ul>
+      <li class="active"><img src="images/1-1.png"/></li>
+      <li><img src="images/1-2.jpg"/></li>
+      <li><img src="images/1-3.jpg"/></li>
+      <li><img src="images/1-4.jpg"/></li>
+    </ul>
+   <div id="num_list">
+      <ul>
+         <li class="active_num"><span class="active_num">1</span></li>
+         <li><span>2</span></li>
+         <li><span>3</span></li>
+         <li><span>4</span></li>
+      </ul>
+   </div>
+   <div id="left"></div>
+   <div id="right"></div>
+</div>
+  </div>
+	<div class="yizu">
+       <a href="#framework"><div class="one"></div></a>
+       <a href="#collect"><div class="two"></div></a>
+	</div>
+	<div class="introduce">
+        <div class="details">
+            <table>
+              <tr>
+                 <td class="big">架构岗</td>
+                 <td class="small">数据分析工程师</br>数据挖掘工程师</br></td>
+                 <td class="big">爬虫岗</td>
+                <td class="small">Python后台开发工程师</br></td>
+              </tr>
+              <tr>
+                 <td class="small">Hadoop架构师</br>Spark架构师</br>Hadoop开发工程师</br></td>
+                 
+                 <td class="big">分析挖掘岗</td>
+                 
+                  <td class="small">Python爬虫工程师</td>
+                 <td class="big">开发岗</td>
+              </tr>
+           </table>
+        </div>
+	</div>
+	<div id="framework">
+	    <div class="framework1"><span>A</span>大数据平台架构</div>
+        <div class="framework2">
+           <ul class="ul2">
+              <li><img src="images/h4.jpg"></li>
+              <li><img src="images/b2.jpg"></li>
+              <li><img src="images/h3.jpg"></li>
+              <li><img src="images/b3.jpg"></li>
+              <li><img src="images/h5.jpg"></li>
+           </ul>
+           <div class="framework4"></div>
+           <div class="framework3">
+           &nbsp&nbsp Hadoop大数据平台架构,一组架构部分主要负责Hadoop集群的架构与维护，以及以Java语言为基础的Hadoop开发。大数据起源于Hadoop的实现，Hadoop是一个分布式开源框架，可以充分利用集群的威力高速运算和存储，集群中可以存储和处理上亿的数据，所以大数据的“大”最能体现在本组。其中Hadoop的核心组件HDFS为海量的数据提供了存储，MapReduce则为海量的数据提供了计算，Hadoop生态圈中还有许多组件为满足用户需求提供了不同的功能。Spark 是一种分布式并行数据处理框架，与Hadoop不同的是Spark启用了内存分布数据集，除了能够提供交互式查询外，它还可以优化迭代工作负载。</br>
+           &nbsp&nbsp在科研室主要先掌握Java语言基础，学习Linux系统，再熟悉Hadoop的搭建与配置，并在Hadoop集群中学习HDFS、MapReduce、Hive、Hbase的组件的使用，深入学习之后还可以学习Spark架构开发的相关知识。Hadoop架构师和Spark架构师在公司工资优渥，大家可以参考拉勾网、智联招聘等网站的“Hadoop架构师”薪资。一组组内团队氛围好，学习氛围浓厚，团队整体进取性强，欢迎大家加入，我们期待你的到来！！！</br>
+          <p class="down">网盘视频下载：<a href="http://pan.baidu.com/s/1dFd2ael">http://pan.baidu.com/s/1dFd2ael</a></p>
+           </div>
+           <div class="framework5"></div>
+         </div>
+	</div>
+	<div id="collect">
+        <div class="collect1"><span>B</span>数据采集</div>
+        <div class="collect2">
+           <ul class="ul3">
+              <li><img src="images/p4.jpg"></li>
+              <li><img src="images/p3.png"></li>
+              <li><img src="images/p5.png"></li>
+              <li><img src="images/p1.png"></li>
+              <li><img src="images/p2.jpg"></li>
+           </ul>
+           <div class="collect4"></div>
+           <div class="collect3">
+           &nbsp&nbspPython是一种面相对象的计算机编程语言，它具有丰富和强大的库，语法简洁，具有易读性以及可扩展性。Python跨平台，可以运行在Linux、windows等平台，还是一种开源语言。Python现在是最受欢迎十五程序设计语言之一，使用率呈直线增长。目前我们对Python的使用主要体现在以下几个方面：</br>
+          &nbsp&nbsp学习编程是学习编程的思想跟能力，而语言其次。Python相对于其他编程语言语法非常简单。你课上也许学c语言语法俩月上手了，那么python一周就可以做出点小成果例如爬虫。一些Python爬虫可以让你在很短的时间看到自己的劳动成果，比如图片，没有繁琐的频繁地开网页的过程，那些图片就会展现在文件夹，比如小说同样不需要再去翻页点击观看，一次下载终生受益（这是玩笑的），人生苦短，吾爱Python。</br>
+          &nbsp&nbsp此外，python也可以做前/后台，学习Django等框架来完成网站搭建。而且，python有3个十分经典的科学计算扩展库：NumPy、SciPy和matplotlib，它们分别为Python提供了快速数组处理、数值运算以及绘图功能。因此Python语言及其众多的扩展库所构成的开发环境十分适合工程技术、科研人员处理实验数据、制作图表，甚至开发科学计算应用程序。</br>
+          &nbsp&nbsp最后，python还可用于自动化运维，测试，游戏开发等等，我们期待你的到来并开启这些道路！！</br>
+         <p class="down">网盘视频下载：<a href="http://pan.baidu.com/s/1pLCZ743">http://pan.baidu.com/s/1pLCZ743</a></p>
+           </div>
+          <div class="collect5"></div>
+      </div>
+    </div>
+
+	<div id="apply"><img src="images/apply.jpg"></div>
+	<div id="mask"></div>
+	<div id="box">
+        <span id="close_all">×</span>
+        <div class="write"><img src="images/tiao.png"><p>填写报名信息</p><img src="images/tiao.png"></div>
+        <form action="/NewRecruitWebb/team.do" method="post" onSubmit="return pan()">
+        <div id="content">
+            <div id="con1"><p>姓名：</p><input name="username" type="text" id="in1" onchange="javascript:if(!/^[\u4e00-\u9fa5]+$/gi.test(this.value)){alert('姓名含有非汉字字符');this.value='';}"></div>
+            <div id="con3"><p>QQ：</p><input name="qq" type="text"   onKeyUp="inp(this)" id="in2"></div>
+            <div id="con2"><p>专业班级：</p><input name="profession" type="text" id="in3"></div>
+            <div id="con4"><p>联系方式：</p><input name="phone" type="text" onKeyUp="inp(this)" id="in4"></div>
+            <div id="con5"><p>报名方向:</p><select name="direction">
+                <option>平台架构</option>
+                <option>数据采集</option>
+            </select></div>
+            <input type="hidden" name="team" value="1">
+            <button type="submit" id="btn" >提交</button>
+        </div>
+        </form>
+	</div>
+	<div id="go_top"><img src="images/return.png" alt="回到顶部图片"></div>
+	<div class="footer">
+        <p>版权所有&nbsp2017-2018&nbsp河北北方学院大数据科研室&nbsp地址:张家口河北北方学院东校区中厅503&nbsp邮编:075000</p>
+        <p>电话:15731337889&nbsp邮箱:1109248830@qq.com</p>
+       
+        <div class="code"><img src="images/yizu.png"></div>
+	</div>
+</body>
+</html>

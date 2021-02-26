@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	1.映射文件中namespace的名称要等于接口的全路径名称
+	2.sql语句的id要等于接口的方法名称
+	3.传入参数类型要等于接口方法的传入参数类型
+	4.返回结果集类型要等于接口方法的返回值类型
+ -->
+ 	<mapper namespace="com.recruit.vo.user">
+ 	
+
+ 	
+ 	
+ 	<select id="findUserByName" parameterType="string" resultType="user">
+            <!-- 此处写sql语句,#{Mapper类传入的参数} -->
+            select * from admin where name = #{name}
+    </select>
+    
+    
+<!-- <mapper namespace="com.recruit.dao.UserDao">
+
+	封装sql条件，封装后可以重用
+		id：是这个sql条件的唯一标识
+	
+	 添加
+	 <insert id="addUser" parameterType="user">
+	 	insert into recruit values(null,#{name},#{password})
+	 </insert>
+	 
+	 删除
+	 <delete id="delUserById" parameterType="user">
+	 	delete from recruit where id=#{id}
+	 </delete>
+	 
+	 查找
+	 <select id="getUser" parameterType="Map" resultType="user">
+	 	select * from recruit
+	 	<where>
+		 	<if test="id!=null and id!=''">
+		 		and id=#{id}
+		 	</if>
+		 	<if test="name!=null and name!=''">
+		 		and name=#{name}
+		 	</if>
+		 	<if test="password and password!=''">
+		 		and password=#{password}
+		 	</if>
+	 	</where>
+	 </select>
+	 
+	 修改
+	 
+	 <update id="updateUser" parameterType="user">
+	 	upadate recruit
+	 	<set>
+	 		<if test="name!=null and name!=''">
+	 			name=#{}
+	 		</if>
+	 		<if test="password!=null and password!=''">
+	 			password=#{}
+	 		</if>
+	 	</set>
+	 	<where>
+	 		id=#{}
+	 	</where>
+	 </update> -->
+	 
+	 
+	 
+	
+	
+
+</mapper>

@@ -1,0 +1,400 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>二组详情</title>
+<link type="text/css" href="css/erzu.css" rel="stylesheet" media="screen" >
+<script src="js/jquery-2.1.1.min.js"></script>
+	<script>
+	//鼠标划过
+        function fn(obj){
+           var target=document.getElementById(obj);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='transparent';
+           target.style.backgroundColor='#6b7173';
+        }
+        function fnn(i){
+           var a=document.getElementById(i);
+           var li1=document.getElementById("li1");
+           li1.style.backgroundColor='#6b7173';
+           a.style.backgroundColor='transparent';
+        }
+        //表单验证只能输入数字
+         function inp(x){   
+var regStrs = [ 
+ ['^0(\\d+)', '$1'], //禁止录入整数部分两位以上，但首位为0 
+ ['[^0-9\]', ''] //禁止录入任何非数字和点 
+]; 
+ for(i=0; i<regStrs.length; i++){ 
+ var reg = new RegExp(regStrs[i][0]); 
+ x.value = x.value.replace(reg, regStrs[i][1]); 
+ } 
+}
+//验证不能为空
+       
+   //模态框效果
+        window.onload=function(){
+        function $(id){return document.getElementById(id);}
+       	  $("apply").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+       	  $("close_all").onclick=function(){
+       	  	$("mask").style.display="none";
+            $("box").style.display="none";
+       	  }
+       	  $("li4").onclick=function(){
+       	  	$("mask").style.display="block";
+            $("box").style.display="block";
+       	  }
+
+         var analyze6=document.getElementById("analyze6");
+        	function yourFunction(liid,bg){    //封装函数
+              obj=document.getElementById(liid);
+              obj.onmouseover=function(){
+                analyze6.style.backgroundImage=bg;
+              }
+        	}
+        	yourFunction("li01","url(images/01.jpg)");
+        	yourFunction("li02","url(images/02.jpg)");
+        	yourFunction("li03","url(images/03.jpg)");
+        	yourFunction("li04","url(images/04.jpg)");
+
+        var visual6=document.getElementById("visual6");
+        	function heFunction(liid,bg){    //封装函数
+              obj=document.getElementById(liid);
+              obj.onmouseover=function(){
+                visual6.style.backgroundImage=bg;
+              }
+        	}
+        	heFunction("li001","url(images/05.jpg)");
+        	heFunction("li002","url(images/06.jpg)");
+        	heFunction("li003","url(images/07.jpg)");
+        	heFunction("li004","url(images/08.jpg)");
+
+          //轮播图
+          // 获取所有的li，轮播的元素
+    var lis = document.getElementById('lun').children[0].children;
+    console.log(lis);
+    // 获取所有的数字li
+    var num_lis = document.getElementById('num_list').children[0].children;
+    // console.log(num_lis);
+    // lis 长度为4，下标从0开始
+    // 设置i下标，表示第几张图片
+    var i = 0;
+    // 设置轮播图是否已启动的标志
+    var run = null;
+    // 获取左箭头/右箭头
+    var left = document.getElementById('left');
+    var right = document.getElementById('right');
+    // 设置定时器函数
+    function autoRun(){
+      run = setInterval(function(){
+        // 当前显示的图片要隐藏
+        lis[i].removeAttribute('class');
+        // 当前显示激活的数字的背景要被移除
+        num_lis[i].children[0].removeAttribute('class');
+        // children[0]  === firstElementChild
+        // i 下标，自增，表示下一张
+        i++;
+        // 如果循环到了最后一张图片
+        if(i==lis.length){
+          i=0;
+        }
+        // 下一张显示
+        lis[i].className = 'active';
+        // 下一个数字的背景设置为激活
+        num_lis[i].children[0].className = 'active_num';
+      },1000);
+    }
+    // 第一次进入该页面，调用轮播函数
+    autoRun();
+    // 给每一张图都设置鼠标进入、移出的事件
+    for(var j=0;j<lis.length;j++){
+      // 当鼠标进入到轮播图时，停止
+      lis[j].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 显示左右箭头
+        left.style.display = 'block';
+        right.style.display = 'block';
+      }
+      // 鼠标离开继续开始
+      lis[j].onmouseout = function(){
+        // 再次调用轮播函数
+        autoRun();
+        // 显示左右箭头
+        left.style.display = 'none';
+        right.style.display = 'none';
+      }
+    }
+    // 给每一个数字都设置鼠标的移入、移出事件
+    for(var k=0;k<num_lis.length;k++){
+      // 将数字对应的下标绑定到每一个span中
+      num_lis[k].firstElementChild.setAttribute('num',k);
+      // 移入事件
+      num_lis[k].onmouseover = function(){
+        // 停止计时器
+        clearInterval(run);
+        // 移出之前的元素的 ---> i 图片
+        lis[i].className = '';
+        // 数字列表位置的背景移除
+        num_lis[i].firstElementChild.className = '';
+        // 上面的图片对应的当前的数字进行显示
+        i = this.firstElementChild.getAttribute('num');
+        // alert(i);
+        // 当前图
+        lis[i].className = 'active';
+        // 当前数字
+        num_lis[i].firstElementChild.className = 'active_num';
+      }
+      // 移除
+      num_lis[k].onmouseout = function(){
+        // 重新启动定时器
+        autoRun();
+      }
+    }
+    // 当鼠标移入、移除 num_list div时相应的停止、开始
+    num_list.onmouseover = function(){
+      // 停止
+      clearInterval(run);
+    }
+    num_list.onmouseout = function(){
+      // 先清除，再调用
+      clearInterval(run);
+      // 调用函数
+      autoRun();
+    }
+    // 给右箭头设置over和out事件
+    right.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    right.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    right.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i++ 之后，显示新的
+      i++;
+      // 判断临界点
+      if(i==lis.length){
+        i=0;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+    }
+    // 给左箭头设置over和out事件
+    left.onmouseover = function(){ 
+      // 显示左右箭头
+      left.style.display = 'block';
+      right.style.display = 'block';
+      // 停止定时器
+      clearInterval(run);
+    }
+    left.onmouseout = function(){
+      // 隐藏左右箭头
+      left.style.display = 'none';
+      right.style.display = 'none';
+      // 启动定时器
+      autoRun();
+    }
+    // 当单击右箭头时，图片向前
+    left.onclick = function(){
+      // 将之前显示的图片、数字隐藏
+      lis[i].className = '';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = '';
+      // i的值如果是0，表示当前已经是第一张
+      // i++ 之后，显示新的
+      i--;
+      // 判断临界点
+      if(i<0){
+        // 下标的最大值 = 长度 - 1
+        i=lis.length - 1;
+      }
+      // 新图
+      lis[i].className = 'active';
+      // 数字列表位置的背景移除
+      num_lis[i].firstElementChild.className = 'active_num';      
+         }
+        }
+        //返回顶部
+      $(document).ready(function(){  
+    $("#go_top").hide();  
+    $(function () {  
+        //检测屏幕高度  
+        var height=$(window).height();  
+        //scroll() 方法为滚动事件  
+        $(window).scroll(function(){  
+            if ($(window).scrollTop()>height){  
+                $("#go_top").fadeIn(500);  
+            }else{  
+                $("#go_top").fadeOut(500);  
+                }  
+        });  
+        $("#go_top").click(function(){  
+            $('body,html').animate({scrollTop:0},100);  
+            return false;  
+        });  
+    });  
+});
+      function pan(){
+      var  in1value=document.getElementById("in1").value;
+      var  in2value=document.getElementById("in2").value;
+      var  in3value=document.getElementById("in3").value;
+      var  in4value=document.getElementById("in4").value;
+      if(in1value==""){
+        alert("姓名不能为空");
+		return false;
+      }
+      else if(in2value==""){
+        alert("QQ不能为空");
+		return false;
+      }
+      else if(in3value==""){
+        alert("专业不能为空");
+		return false;
+      }
+      else if (in4value=="") {
+        alert("联系方式不能为空");
+		return false;
+      }
+      else{ return true;}
+
+     }
+
+	</script>
+</head>
+<body>
+<nav>
+       <ul class="ul1">
+          <a href="#"><li id="li1">二组首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li2" onmouseover="fn('li2');" onmouseout="fnn('li2')">招新首页</li></a>
+          <a href="/NewRecruitWebb/index.jsp"><li id="li3" onmouseover="fn('li3');" onmouseout="fnn('li3')">科研室首页</li></a>
+          <a href="#"><li id="li4" onmouseover="fn('li4');" onmouseout="fnn('li4')">报名加入</li></a>
+       </ul>
+       <p>这里提供给你免费的平台去学习，去拼搏努力，加入我们实现自己的价值！</p>
+	</nav>
+	<div class="video">
+  <div id="lun">
+    <ul>
+      <li class="active"><img src="images/2-1.jpg"/></li>
+      <li><img src="images/2-2.jpg"/></li>
+      <li><img src="images/2-3.jpg"/></li>
+      <li><img src="images/2-4.jpg"/></li>
+    </ul>
+   <div id="num_list">
+      <ul>
+         <li class="active_num"><span class="active_num">1</span></li>
+         <li><span>2</span></li>
+         <li><span>3</span></li>
+         <li><span>4</span></li>
+      </ul>
+   </div>
+   <div id="left"></div>
+   <div id="right"></div>
+  </div>
+  </div>
+	<div class="erzu">
+       <a href="#analyze"><div class="one"></div></a>
+       <a href="#visual"><div class="two"></div></a>
+	</div>
+	<div class="introduce">
+        <div class="details">
+           <table>
+              <tr>
+                 <td class="big">数据分析</td>
+                 <td class="small">数据建模师</td>
+                 <td class="big">数据架构</td>
+                 <td class="small">数据可视化</br>工程师</br></td>
+              </tr>
+              <tr>
+                 <td class="small">文本分析</br>推荐系统</br>数据库</br></td>
+                 <td class="big">数据建模</td>
+                 <td class="small">R与Hadoop平台</br></td>
+                 <td class="big">数据可视化</td>
+              </tr>
+           </table>
+        </div>
+	</div>
+	<div id="analyze">
+	    <div class="analyze1"><span>A</span>数据分析</div>
+        <div class="analyze2">
+           <div class="analyze4"></div>
+           <div class="analyze3">&nbsp&nbsp数据分析是组织有目的地收集数据、分析数据，使之成为信息的过程。这一过程是质量管理体系的支持过程。数据分析是把隐没在一大批看来杂乱无章的数据中的信息集中、萃取和提炼出来，以找出所研究对象的内在规律。在实用中，数据分析可帮助人们作出判断，以便采取适当行动。以下是其中几种算法做出来的效果图（图一：支持向量机；图二：决策树；图三：时间序列；图四：层次聚类；）
+            <p class="down"> &nbsp网盘视频下载：<a href="http://pan.baidu.com/s/1qYxy0v6">http://pan.baidu.com/s/1qYxy0v6</a></p>
+           </div>
+           <div class="analyze5"></div>
+           <div id="analyze6">
+              <ul>
+               <li id="li01"><img src="images/1.jpg"></li>
+               <li id="li02"><img src="images/2.jpg"></li>
+               <li id="li03"><img src="images/3.jpg"></li>
+               <li id="li04"><img src="images/4.jpg"></li>
+             </ul>
+           </div>
+         </div>
+	</div>
+	<div id="visual">
+        <div class="visual1"><span>B</span>数据可视化</div>
+        <div class="visual2">
+           <div class="visual4"></div>
+           <div class="visual3">&nbsp&nbsp可视化是利用计算机图形学和图像处理技术，将数据转换成图形或图像在屏幕上显示出来，并进行交互处理的理论、方法和技术。它涉及到计算机图形学、图像处理、计算机视觉、计算机辅助设计等多个领域，成为研究数据表示、数据处理、决策分析等一系列问题的综合技术。
+          <p class="down" >&nbsp网盘视频下载:<a href="http://pan.baidu.com/s/1qYxy0v6">http://pan.baidu.com/s/1qYxy0v6</a></p>
+           </div>
+          <div class="visual5"></div>
+          <div id="visual6">
+              <ul>
+               <li id="li001"><img src="images/5.jpg"></li>
+               <li id="li002"><img src="images/6.jpg"></li>
+               <li id="li003"><img src="images/7.jpg"></li>
+               <li id="li004"><img src="images/8.jpg"></li>
+             </ul>
+          </div>
+      </div>
+    </div>
+
+	<div id="apply"><img src="images/apply.jpg"></div>
+	<div id="mask"></div>
+	<div id="box">
+        <span id="close_all">×</span>
+        <div class="write"><img src="images/tiao.png"><p>填写报名信息</p><img src="images/tiao.png"></div>
+         <form action="/NewRecruitWebb/team.do" method="post" onSubmit="return pan()">
+        <div id="content">
+            <div id="con1"><p>姓名：</p><input name="username" type="text" id="in1" onchange="javascript:if(!/^[\u4e00-\u9fa5]+$/gi.test(this.value)){alert('姓名含有非汉字字符');this.value='';}"></div>
+            <div id="con3"><p>QQ：</p><input name="qq" type="text"   onKeyUp="inp(this)" id="in2"></div>
+            <div id="con2"><p>专业班级：</p><input name="profession" type="text" id="in3"></div>
+            <div id="con4"><p>联系方式：</p><input name="phone" type="text" onKeyUp="inp(this)" id="in4"></div>
+            <div id="con5"><p>报名方向:</p><select name="direction">
+                <option>数据分析</option>
+                <option>数据可视化</option>
+            </select></div>
+            <input type="hidden" name="team" value="2">
+            <button type="submit" id="btn">提交</button>
+        </div>
+        </form>
+	</div>
+	<div id="go_top"><img src="images/return.png" alt="回到顶部图片"></div>
+	<div class="footer">
+        <p>版权所有&nbsp2017-2018&nbsp河北北方学院大数据科研室&nbsp地址:张家口河北北方学院东校区中厅503&nbsp邮编:075000</p>
+        <p>电话:15731337889&nbsp邮箱:1109248830@qq.com</p>
+       <div class="code"><img src="images/erzu.png"></div>
+	</div>
+
+</body>
+</html>

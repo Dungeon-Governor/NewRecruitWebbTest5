@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	1.映射文件中namespace的名称要等于接口的全路径名称
+	2.sql语句的id要等于接口的方法名称
+	3.传入参数类型要等于接口方法的传入参数类型
+	4.返回结果集类型要等于接口方法的返回值类型
+ -->
+ 	<mapper namespace="com.recruit.vo.team">
+ 	
+ 	
+ 	
+ 	
+ 	<insert id="addTeam" parameterType="team">
+            <!-- 此处写sql语句,#{Mapper类传入的参数} -->
+            insert into team() values(null,#{username},#{qq},#{profession},#{phone},#{direction})
+    </insert>
+    
+    <select id="list1" resultType="team">
+	 	select * from team
+	</select>
+	
+	
+	<delete id="deleteTeamByid" parameterType="Integer">
+		delete from team where id=#{id}
+	</delete>
+	
+
+</mapper>
